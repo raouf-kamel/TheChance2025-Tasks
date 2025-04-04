@@ -36,7 +36,35 @@ fun check(name: String, result: Boolean, correctResult: Boolean) {
 }
 fun isValidSudoku(board: List<List<Char>>): Boolean {
 
+    val size = board.size
+    val boxSize = Math.sqrt(size.toDouble()).toInt()
 
+    // التحقق من عدم التكرار في الصفوف والأعمدة
+    for (i in 0 until size) {
+        val rowSet = mutableSetOf<Char>()
+        val colSet = mutableSetOf<Char>()
+
+        for (j in 0 until size) {
+            val rowVal = board[i][j]
+            val colVal = board[j][i]
+
+            if (rowVal != '-' && !rowSet.add(rowVal)) return false
+            if (colVal != '-' && !colSet.add(colVal)) return false
+        }
+    }
+
+    // التحقق من عدم التكرار في المربعات الفرعية
+    for (row in 0 until size step boxSize) {
+        for (col in 0 until size step boxSize) {
+            val boxSet = mutableSetOf<Char>()
+            for (i in 0 until boxSize) {
+                for (j in 0 until boxSize) {
+                    val value = board[row + i][col + j]
+                    if (value != '-' && !boxSet.add(value)) return false
+                }
+            }
+        }
+    }
 
     return true
 }
